@@ -45,3 +45,8 @@ apply_*.js
 generate_*.js
 temp.html
 tmp-app/
+update_*.js
+remove_*.js
+integrate_*.js
+fix_*.js
+*.zip

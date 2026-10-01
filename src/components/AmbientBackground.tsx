@@ -9,7 +9,8 @@ export default function AmbientBackground() {
     const ctx = canvas.getContext('2d', { alpha: true });
     if (!ctx) return;
     
-    let particles: {x: number, y: number, r: number, vx: number, vy: number, op: number}[] = [];
+    type Particle = { x: number, y: number, r: number, vx: number, vy: number, op: number, type: 'gold' | 'blush' | 'wine' | 'petal' | 'star' | 'heart' };
+    let particles: Particle[] = [];
     
     const resize = () => {
       canvas.width = window.innerWidth;
@@ -18,28 +19,43 @@ export default function AmbientBackground() {
     resize();
     window.addEventListener('resize', resize);
     
-    // Reduce particle count on smaller screens for performance
-    const count = window.innerWidth < 768 ? 20 : 40;
+    const count = window.innerWidth < 768 ? 20 : 45;
+    const types: Particle['type'][] = ['gold', 'blush', 'wine', 'petal', 'star', 'heart'];
     
     for(let i=0; i<count; i++) {
       particles.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
-        r: Math.random() * 1.5 + 0.5,
-        vx: (Math.random() - 0.5) * 0.15,
-        vy: (Math.random() - 0.5) * 0.15,
-        op: Math.random() * 0.4 + 0.1
+        r: Math.random() * 2 + 0.5,
+        vx: (Math.random() - 0.5) * 0.05,
+        vy: (Math.random() - 0.5) * 0.05 - 0.03, // dreamy upward drift
+        op: Math.random() * 0.3 + 0.05,
+        type: types[Math.floor(Math.random() * types.length)]
       });
     }
     
     let animId: number;
     let isActive = true;
     
-    // Pause animation when tab is hidden
     const handleVisibilityChange = () => {
       isActive = !document.hidden;
     };
     document.addEventListener('visibilitychange', handleVisibilityChange);
+
+    const drawHeart = (ctx: CanvasRenderingContext2D, x: number, y: number, size: number, opacity: number) => {
+      ctx.save();
+      ctx.translate(x, y);
+      ctx.scale(size/10, size/10);
+      ctx.fillStyle = `rgba(248, 200, 216, ${opacity})`;
+      ctx.beginPath();
+      ctx.moveTo(0, 0);
+      ctx.bezierCurveTo(0, -3, -5, -3, -5, 0);
+      ctx.bezierCurveTo(-5, 3, 0, 5, 0, 7);
+      ctx.bezierCurveTo(0, 5, 5, 3, 5, 0);
+      ctx.bezierCurveTo(5, -3, 0, -3, 0, 0);
+      ctx.fill();
+      ctx.restore();
+    };
 
     const render = () => {
       if (!isActive) {
@@ -52,13 +68,32 @@ export default function AmbientBackground() {
         p.x += p.vx;
         p.y += p.vy;
         
-        if (p.x < 0) p.x = canvas.width; if (p.x > canvas.width) p.x = 0;
-        if (p.y < 0) p.y = canvas.height; if (p.y > canvas.height) p.y = 0;
+        // Sway for petals
+        if (p.type === 'petal') {
+           p.x += Math.sin(p.y * 0.01) * 0.1;
+        }
+
+        if (p.x < -10) p.x = canvas.width + 10; if (p.x > canvas.width + 10) p.x = -10;
+        if (p.y < -10) p.y = canvas.height + 10; if (p.y > canvas.height + 10) p.y = -10;
         
         ctx.beginPath();
-        ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-        ctx.fillStyle = `rgba(255, 192, 203, ${p.op})`;
-        ctx.fill();
+        if (p.type === 'heart') {
+          drawHeart(ctx, p.x, p.y, p.r * 1.5, p.op);
+        } else if (p.type === 'star') {
+          ctx.arc(p.x, p.y, p.r * 0.5, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(249, 234, 208, ${p.op * 1.5})`;
+          ctx.fill();
+        } else if (p.type === 'petal') {
+          ctx.ellipse(p.x, p.y, p.r, p.r * 0.5, p.x * 0.01, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(248, 200, 216, ${p.op})`;
+          ctx.fill();
+        } else {
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          if (p.type === 'gold') ctx.fillStyle = `rgba(249, 234, 208, ${p.op})`; 
+          else if (p.type === 'wine') ctx.fillStyle = `rgba(61, 12, 28, ${p.op})`; 
+          else ctx.fillStyle = `rgba(248, 200, 216, ${p.op})`; 
+          ctx.fill();
+        }
       });
       animId = requestAnimationFrame(render);
     };
@@ -72,12 +107,11 @@ export default function AmbientBackground() {
   }, []);
 
   return (
-    <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden bg-[#050505]">
-      {/* Cinematic subtle gradients */}
-      <div className="absolute -top-[20%] -left-[10%] w-[60%] h-[60%] bg-pink-900/10 rounded-full blur-[140px] opacity-70 mix-blend-screen" />
-      <div className="absolute top-[50%] -right-[20%] w-[70%] h-[70%] bg-purple-900/10 rounded-full blur-[160px] opacity-60 mix-blend-screen" />
-      
-      <canvas ref={canvasRef} className="absolute inset-0 opacity-50"></canvas>
+    <div className="fixed inset-0 pointer-events-none z-[-1] overflow-hidden bg-[#050204]">
+      <div className="absolute -top-[10%] -left-[10%] w-[50%] h-[50%] bg-[#3d0c1c] rounded-full blur-[140px] opacity-[0.3] mix-blend-screen" />
+      <div className="absolute top-[40%] -right-[20%] w-[60%] h-[60%] bg-[#1a0b18] rounded-full blur-[160px] opacity-[0.5] mix-blend-screen" />
+      <div className="absolute bottom-[0%] left-[10%] w-[30%] h-[30%] bg-[#f8c8d8] rounded-full blur-[150px] opacity-[0.08] mix-blend-screen" />
+      <canvas ref={canvasRef} className="absolute inset-0 opacity-70"></canvas>
     </div>
   );
 }

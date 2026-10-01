@@ -1,98 +1,95 @@
+'use client';
+
+import { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { useState } from 'react';
+import { cutieeContent } from '../content/cutiee';
+import CinematicPhoto from './CinematicPhoto';
 import FloatingEmojis from './FloatingEmojis';
 
-export default function SpecialPhotoReveal({ onNext, photoUrl }: { onNext: () => void, photoUrl?: string }) {
+const revealLines = [
+  'Ek tasveer, iss kahaani ke beech ek narm sa waqfa.',
+  'Bas ek pal, aaram se dekhne ke liye.',
+  'Iss jhalak ko thoda sa waqt do.',
+  'Allah aapki muskurahat hamesha mehfooz rakhe. 🤍'
+];
+
+export default function SpecialPhotoReveal({ onNext }: { onNext: () => void }) {
   const [opened, setOpened] = useState(false);
   const [phase, setPhase] = useState(0);
+  const photo = cutieeContent.photos.find(item => item.id === 15);
 
-  const handleOpen = () => {
-    setOpened(true);
-    setTimeout(() => setPhase(1), 3000);
-    setTimeout(() => setPhase(2), 6000);
-    setTimeout(() => setPhase(3), 9000);
-    setTimeout(() => setPhase(4), 12000); 
-  };
+  useEffect(() => {
+    if (!opened || phase >= revealLines.length - 1) return;
+
+    const timer = window.setTimeout(() => setPhase(current => current + 1), 2600);
+    return () => window.clearTimeout(timer);
+  }, [opened, phase]);
 
   return (
-    <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} exit={{ opacity: 0, scale: 1.1, filter: 'blur(10px)' }} className="min-h-screen flex flex-col items-center justify-center p-6 text-center relative overflow-hidden bg-black">
-      <motion.div 
-        animate={{ opacity: opened ? 1 : 0 }} 
-        transition={{ duration: 2 }}
-        className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-pink-900/20 via-orange-900/10 to-transparent pointer-events-none" 
+    <motion.div
+      initial={{ opacity: 0 }}
+      animate={{ opacity: 1 }}
+      exit={{ opacity: 0, scale: 1.04, filter: 'blur(10px)' }}
+      className="relative flex min-h-screen flex-col items-center justify-center overflow-hidden bg-[#050204] px-5 py-20 text-center"
+    >
+      <motion.div
+        animate={{ opacity: opened ? 1 : 0 }}
+        transition={{ duration: 1.6 }}
+        className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_center,_var(--tw-gradient-stops))] from-[#f8c8d8]/15 via-[#3d0c1c]/10 to-transparent"
       />
 
       {!opened ? (
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="z-10 flex flex-col items-center">
-          <p className="text-lg md:text-xl text-gray-300 font-serif mb-8">Ek photo... jo thodi zyada hi khoobsurat hai 👀</p>
-          <motion.button 
-            whileHover={{ scale: 1.05 }} 
-            whileTap={{ scale: 0.95 }}
-            onClick={handleOpen}
-            className="px-8 py-4 bg-white/10 backdrop-blur-md border border-pink-500/30 text-pink-200 rounded-full font-medium shadow-[0_0_20px_rgba(236,72,153,0.15)]"
+        <motion.div initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} className="z-10 flex flex-col items-center">
+          <p className="mb-8 max-w-xs font-serif text-lg italic leading-relaxed text-[#f8c8d8]">
+            Ek tasveer ke liye, ek alag sa pal.
+          </p>
+          <motion.button
+            whileTap={{ scale: 0.96 }}
+            onClick={() => setOpened(true)}
+            className="glass-button flex flex-col items-center gap-3 rounded-2xl border-[#f9ead0]/30 px-10 py-6 text-[#f9ead0] shadow-[0_0_30px_rgba(249,234,208,0.12)] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f9ead0]"
           >
-            Open karun? 💋
+            <span aria-hidden="true" className="text-xl">✦</span>
+            <span className="text-xs uppercase tracking-[0.22em]">Tasveer kholo</span>
           </motion.button>
         </motion.div>
       ) : (
-        <motion.div className="z-10 flex flex-col items-center w-full max-w-md">
-          <FloatingEmojis emojis={['💋', '🌸', '🥰', '🫶🏻', '💕', '✨', '👀']} count={8} />
-          
-          <motion.div 
-            initial={{ scale: 0.92, filter: 'blur(20px)', opacity: 0 }} 
-            animate={{ scale: 1, filter: 'blur(0px)', opacity: 1 }} 
-            transition={{ type: 'spring', duration: 2, bounce: 0.2 }}
-            className="w-full aspect-[3/4] max-h-[60vh] bg-white/5 border border-white/20 rounded-3xl overflow-hidden relative shadow-[0_0_40px_rgba(236,72,153,0.3)] mb-8"
+        <motion.div className="z-10 flex w-full max-w-sm flex-col items-center">
+          <FloatingEmojis emojis={['✨', '🌸', '🤍']} count={5} />
+
+          <motion.div
+            initial={{ scale: 0.94, filter: 'blur(24px)', opacity: 0 }}
+            animate={{ scale: 1, filter: 'blur(0px)', opacity: 1 }}
+            transition={{ duration: 1.8, ease: 'easeOut' }}
+            className="sparkle-edge relative mb-6 w-full overflow-hidden rounded-3xl border border-[#f9ead0]/20 bg-white/[0.025] p-2 shadow-[0_22px_70px_rgba(0,0,0,0.55)]"
           >
-            {photoUrl ? (
-              <img src={photoUrl} alt="Special" className="w-full h-full object-cover" />
-            ) : (
-              <div className="w-full h-full flex items-center justify-center text-5xl">✨📸✨</div>
-            )}
-            <div className="absolute top-4 left-0 right-0 flex justify-center">
-              <span className="px-3 py-1 bg-black/50 backdrop-blur-md border border-white/10 rounded-full text-[10px] text-pink-200 tracking-[0.2em] uppercase font-bold shadow-lg">
-                SECRET FAVORITE
-              </span>
-            </div>
-            <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-transparent to-transparent pointer-events-none" />
+            <CinematicPhoto
+              photo={photo}
+              sizes="(max-width: 640px) 84vw, 340px"
+              className="aspect-[3/4] max-h-[58svh] rounded-2xl"
+            />
+            <div className="pointer-events-none absolute inset-x-2 bottom-2 h-1/4 rounded-b-2xl bg-gradient-to-t from-[#1a0b18]/55 to-transparent" />
           </motion.div>
 
-          <div className="h-24 flex items-center justify-center">
-            {phase === 0 && (
-              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-lg md:text-xl text-pink-100 font-serif leading-relaxed">
-                Areyyy Jaanuuu... ye wali toh dangerous level ki cute hai 😭❤️
-              </motion.p>
-            )}
-            {phase === 1 && (
-              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-lg md:text-xl text-pink-100 font-serif leading-relaxed">
-                Meku laga isko special jagah milni chahiye thi 💋🌸
-              </motion.p>
-            )}
-            {phase === 2 && (
-              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-lg md:text-xl text-pink-100 font-serif leading-relaxed">
-                Acha sunooo... 👀<br/>Itni cute rehne ka permission kisne diya reyy? 😂❤️
-              </motion.p>
-            )}
-            {phase === 3 && (
-              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-lg md:text-xl text-pink-100 font-serif leading-relaxed">
-                Meku toh pehle hi pata tha... aap problem ho Jaanuuu 😭💋
-              </motion.p>
-            )}
-            {phase === 4 && (
-              <motion.p initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} className="text-lg md:text-xl text-white/90 font-serif leading-relaxed italic">
-                Allah tumhari muskurahat hamesha mehfooz rakhe. 🤍
-              </motion.p>
-            )}
-          </div>
-          
-          <motion.button 
-            initial={{ opacity: 0 }} animate={{ opacity: phase >= 4 ? 1 : 0 }} 
-            disabled={phase < 4}
-            whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}
-            onClick={onNext}
-            className="mt-8 text-xs text-gray-400 hover:text-white uppercase tracking-[0.2em] border border-gray-800 rounded-full px-6 py-2 transition-colors"
+          <motion.p
+            key={phase}
+            initial={{ opacity: 0, y: 10, filter: 'blur(5px)' }}
+            animate={{ opacity: 1, y: 0, filter: 'blur(0px)' }}
+            transition={{ duration: 0.8 }}
+            className="min-h-14 px-2 font-serif text-base italic leading-relaxed text-[#f9ead0] sm:text-lg"
+            aria-live="polite"
           >
-            Continue
+            {revealLines[phase]}
+          </motion.p>
+
+          <motion.button
+            initial={{ opacity: 0 }}
+            animate={{ opacity: phase === revealLines.length - 1 ? 1 : 0 }}
+            disabled={phase !== revealLines.length - 1}
+            whileTap={{ scale: 0.96 }}
+            onClick={onNext}
+            className="mt-4 rounded-full border border-white/15 px-7 py-3 text-xs uppercase tracking-[0.2em] text-white/60 transition-colors hover:border-[#f9ead0]/50 hover:text-[#f9ead0] focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-4 focus-visible:outline-[#f9ead0] disabled:pointer-events-none"
+          >
+            Aage chalo
           </motion.button>
         </motion.div>
       )}

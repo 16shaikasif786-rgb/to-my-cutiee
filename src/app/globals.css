@@ -1,13 +1,21 @@
 @import "tailwindcss";
 
 :root {
-  --background: #050505;
+  --background: #050204;
   --foreground: #ffffff;
+  --wine: #3d0c1c;
+  --blush: #f8c8d8;
+  --midnight-plum: #1a0b18;
+  --champagne: #f9ead0;
 }
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
+  --color-wine: var(--wine);
+  --color-blush: var(--blush);
+  --color-midnight-plum: var(--midnight-plum);
+  --color-champagne: var(--champagne);
 }
 
 body {
@@ -18,6 +26,82 @@ body {
 }
 
 ::selection {
-  background: rgba(236, 72, 153, 0.3);
+  background: rgba(249, 234, 208, 0.3);
   color: white;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    scroll-behavior: auto !important;
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+  }
+}
+
+/* Luxury Glass UI Utilities */
+.glass-panel {
+  background: rgba(255, 255, 255, 0.02);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(248, 200, 216, 0.15);
+  box-shadow: 0 10px 40px 0 rgba(61, 12, 28, 0.3), inset 0 0 20px rgba(248, 200, 216, 0.02);
+}
+
+.glass-button {
+  background: rgba(255, 255, 255, 0.06);
+  backdrop-filter: blur(12px);
+  border: 1px solid rgba(248, 200, 216, 0.2);
+  box-shadow: 0 6px 20px rgba(248, 200, 216, 0.08), inset 0 0 10px rgba(255, 255, 255, 0.05);
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.glass-button:hover {
+  background: rgba(255, 255, 255, 0.12);
+  border-color: rgba(249, 234, 208, 0.5);
+  box-shadow: 0 0 25px rgba(249, 234, 208, 0.2), inset 0 0 15px rgba(255, 255, 255, 0.1);
+  transform: translateY(-1px);
+}
+
+/* Diary / Polaroid specific styling */
+.polaroid-card {
+  background: rgba(255, 255, 255, 0.04);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 24px solid rgba(255, 255, 255, 0.06);
+  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.4);
+}
+
+.ribbon-accent {
+  position: absolute;
+  top: -10px;
+  right: -10px;
+  width: 40px;
+  height: 40px;
+  background: linear-gradient(135deg, rgba(248, 200, 216, 0.6), rgba(249, 234, 208, 0.3));
+  clip-path: polygon(100% 0, 100% 100%, 50% 80%, 0 100%, 0 0);
+  box-shadow: 0 2px 10px rgba(248, 200, 216, 0.2);
+}
+
+.sparkle-edge {
+  position: relative;
+}
+.sparkle-edge::before {
+  content: '';
+  position: absolute;
+  inset: -1px;
+  background: linear-gradient(90deg, transparent, rgba(249, 234, 208, 0.5), transparent);
+  mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  padding: 1px;
+  border-radius: inherit;
+  opacity: 0.5;
+  animation: shimmer 3s infinite linear;
+}
+@keyframes shimmer {
+  100% { transform: rotate(1turn); }
 }

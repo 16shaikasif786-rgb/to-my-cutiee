@@ -56,7 +56,7 @@ export default function ChaosArena({ onNext }: { onNext: () => void }) {
       {phase === 2 && <FloatingEmojis emojis={['😂', '🤭', '👀', '✨']} count={8} />}
       
       <h2 className="text-xl md:text-2xl text-white/70 font-serif mb-12 z-10 text-center pointer-events-none">
-        {phase === 0 ? "Thoda khel lein? 👀" : phase === 1 ? "Catch the hearts! 💕" : "Areyyy wahhh 😂❤️"}
+        {phase === 0 ? "Thoda khel lein? 👀" : phase === 1 ? "Catch the hearts! 💕" : "Arey wahhh 😂❤️"}
       </h2>
       
       <AnimatePresence mode="wait">
@@ -67,9 +67,9 @@ export default function ChaosArena({ onNext }: { onNext: () => void }) {
                 onHoverStart={moveButton}
                 onClick={handleButtonInteract}
                 whileTap={{ scale: 0.9 }}
-                className="px-8 py-4 bg-pink-500/10 backdrop-blur-md border border-pink-500/30 text-pink-200 rounded-full shadow-[0_0_20px_rgba(236,72,153,0.15)] font-medium"
+                className="px-8 py-4 glass-button backdrop-blur-md border  text-[#f4d9e1] rounded-full shadow-[0_0_20px_rgba(244,217,225,0.2)] font-medium"
               >
-                {buttonClicks === 0 ? "Bas ek baar tap karo 👀" : buttonClicks === 1 ? "Nice try 😂" : buttonClicks === 2 ? "Arey pakdo na!" : "Areyyy Jaanuuu 😂 itna aasaan thodi na hai!"}
+                {buttonClicks === 0 ? "Bas ek baar tap karo 👀" : buttonClicks === 1 ? "Nice try 😂" : buttonClicks === 2 ? "Arey pakdo na!" : "Arey Jaanuuu 😂 itna aasaan thodi na hai!"}
               </motion.button>
           </motion.div>
         )}
@@ -81,7 +81,7 @@ export default function ChaosArena({ onNext }: { onNext: () => void }) {
               whileTap={{ scale: 0.7 }}
               initial={{ scale: 0 }}
               animate={{ ...heartPos, scale: 1 }}
-              className="text-4xl md:text-5xl drop-shadow-[0_0_10px_rgba(236,72,153,0.5)] p-4 outline-none"
+              className="text-4xl md:text-5xl drop-shadow-[0_0_15px_rgba(244,217,225,0.4)] p-4 outline-none"
             >
               {['❤️', '🌸', '💕', '🥰', '🫶🏻'][heartsCaught % 5]}
             </motion.button>
@@ -91,7 +91,7 @@ export default function ChaosArena({ onNext }: { onNext: () => void }) {
 
         {phase === 2 && (
           <motion.div key="phase2" className="text-center z-10 flex flex-col items-center" initial={{ scale: 0.8, opacity: 0 }} animate={{ scale: 1, opacity: 1 }}>
-            <p className="text-pink-300 mb-8 font-serif text-xl md:text-2xl">Maan gaye aapki speed ko! ✨</p>
+            <p className="text-[#f4d9e1] mb-8 font-serif text-xl md:text-2xl">Maan gaye aapki speed ko! ✨</p>
             <motion.button whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }} onClick={onNext} className="px-10 py-4 bg-white text-black rounded-full font-bold shadow-[0_0_30px_rgba(255,255,255,0.3)]">
               Continue
             </motion.button>
