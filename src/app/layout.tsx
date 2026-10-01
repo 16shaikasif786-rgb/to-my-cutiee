@@ -13,7 +13,7 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "To My Cutiee | Ek chhota sa raaz",
+  title: "To My Cutiee — Asif Atuba",
   description: "Ek chhoti si Hinglish kahaani, sirf aapke liye.",
 };
 
